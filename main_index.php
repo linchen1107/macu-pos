@@ -112,11 +112,25 @@ foreach ($_SESSION['cart'] as $item) {
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .drink-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .drink-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .drink-name {
@@ -131,24 +145,6 @@ foreach ($_SESSION['cart'] as $item) {
             color: #ff6b6b;
             font-weight: bold;
         }
-
-        .drink-image {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: cover;
-            border-radius: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .drink-item:hover .drink-image {
-            opacity: 1;
         }
 
         .drink-item:hover .drink-content {
@@ -303,8 +299,15 @@ foreach ($_SESSION['cart'] as $item) {
         <p>歡迎光臨，請選擇您喜愛的飲品</p>
     </div>
 
-    <div class="cart-info" onclick="window.location.href='cart.php'">
+    <div class="cart-info" onclick="window.location.href='cart_page.php'">
         🛒 購物車 (<span id="cart-count"><?php echo $cart_count; ?></span>)
+    </div>
+
+    <!-- 管理員入口 -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <a href="admin_login.php" style="background: rgba(0,0,0,0.7); color: white; padding: 10px 15px; border-radius: 25px; text-decoration: none; font-size: 12px; display: inline-block;">
+            🛠️ 管理員
+        </a>
     </div>
 
     <div class="menu-container">
@@ -314,11 +317,9 @@ foreach ($_SESSION['cart'] as $item) {
             <div class="drinks-grid">
                 <?php foreach ($drinks_in_category as $drink): ?>
                 <div class="drink-item" onclick="openOrderModal(<?php echo $drink['id']; ?>, '<?php echo htmlspecialchars($drink['name']); ?>', <?php echo $drink['price']; ?>, '<?php echo htmlspecialchars($drink['image_name']); ?>')">
-                    <div class="drink-content">
-                        <div class="drink-name"><?php echo htmlspecialchars($drink['name']); ?></div>
-                        <div class="drink-price">NT$ <?php echo formatPrice($drink['price']); ?></div>
-                    </div>
                     <img class="drink-image" src="images/<?php echo htmlspecialchars($drink['image_name']); ?>" alt="<?php echo htmlspecialchars($drink['name']); ?>" onerror="this.style.display='none'">
+                    <div class="drink-name"><?php echo htmlspecialchars($drink['name']); ?></div>
+                    <div class="drink-price">NT$ <?php echo formatPrice($drink['price']); ?></div>
                 </div>
                 <?php endforeach; ?>
             </div>
